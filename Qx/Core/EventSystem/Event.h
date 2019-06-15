@@ -6,6 +6,7 @@
 class QEvent;
 class QxEvtHandler;
 class QxCoreApplication;
+class QxIndirectCallEvent;
 
 // Event declaration macros
 #define QxEVENT_DECLARE(name, type)						extern const QxEventTag<type> QxEVT_##name
@@ -18,6 +19,7 @@ class QxEvent
 {
 	friend class QxEvtHandler;
 	friend class QxCoreApplication;
+	friend class QxIndirectCallEvent;
 
 	public:
 		using TCallback = std::function<void(QxEvtHandler&, QxEvent&)>;
@@ -127,10 +129,6 @@ class QxEvent
 		virtual ~QxEvent() = default;
 
 	public:
-		QxEvtHandler* GetSender() const
-		{
-			return m_EventSender;
-		}
 		QxEventID GetEventID() const
 		{
 			return m_EventID;
@@ -138,6 +136,19 @@ class QxEvent
 		void SetEventID(QxEventID id)
 		{
 			m_EventID = id;
+		}
+
+		QxEvtHandler* GetSender() const
+		{
+			return m_EventSender;
+		}
+		void AssignSender(QxEvtHandler& evtHandler)
+		{
+			m_EventSender = &evtHandler;
+		}
+		void ResetSender()
+		{
+			m_EventSender = nullptr;
 		}
 
 		const TCallback& GetCallback() const

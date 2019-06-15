@@ -5,7 +5,7 @@ class QxNotifyEvent: public QxEvent
 {
 	public:
 		// Event for 'QObject::destroyed' signal
-		QxEVENT_DEFINE_SCM(Destroyed, QxNotifyEvent);
+		QxEVENT_DEFINE_SCM(ObjectDestroyed, QxNotifyEvent);
 
 		// Event for 'QObject::objectNameChanged' signal
 		QxEVENT_DEFINE_SCM(ObjectNameChanged, QxNotifyEvent);

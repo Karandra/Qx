@@ -6,11 +6,11 @@
 
 namespace Qx::EventSystem
 {
-	void QtEventFilter::OnDestroyed()
+	void QtEventFilter::OnObjectDestroyed()
 	{
-		m_EvtHandler->ProcessEvent(QxNotifyEvent::EvtDestroyed);;
+		m_EvtHandler->ProcessEvent(QxNotifyEvent::EvtObjectDestroyed);
 	}
-	void QtEventFilter::OnNameChanged(const QString& newName)
+	void QtEventFilter::OnObjectNameChanged(const QString& newName)
 	{
 		m_EvtHandler->ProcessEvent(QxNotifyEvent::EvtObjectNameChanged, newName);
 	}
@@ -21,7 +21,7 @@ namespace Qx::EventSystem
 		{
 			if (QxEvent* event = static_cast<QtEvent&>(qEvent).GetEvent())
 			{
-				m_EvtHandler->ProcessEvent(*event);
+				m_EvtHandler->DoProcessEvent(*event);
 			}
 			return true;
 		}
@@ -56,8 +56,8 @@ namespace Qx::EventSystem
 		{
 			if (QObject* watchedObject = m_EvtHandler->GetWatchedQObject())
 			{
-				ConnectSignal(watchedObject, &QObject::destroyed, &QtEventFilter::OnDestroyed, this);
-				ConnectSignal(watchedObject, &QObject::objectNameChanged, &QtEventFilter::OnNameChanged, this);
+				ConnectSignal(watchedObject, &QObject::destroyed, &QtEventFilter::OnObjectDestroyed, this);
+				ConnectSignal(watchedObject, &QObject::objectNameChanged, &QtEventFilter::OnObjectNameChanged, this);
 
 				watchedObject->installEventFilter(this);
 			}
@@ -69,8 +69,8 @@ namespace Qx::EventSystem
 		{
 			if (QObject* watchedObject = m_EvtHandler->GetWatchedQObject())
 			{
-				DisconnectSignal(watchedObject, &QObject::destroyed, &QtEventFilter::OnDestroyed, this);
-				DisconnectSignal(watchedObject, &QObject::objectNameChanged, &QtEventFilter::OnNameChanged, this);
+				DisconnectSignal(watchedObject, &QObject::destroyed, &QtEventFilter::OnObjectDestroyed, this);
+				DisconnectSignal(watchedObject, &QObject::objectNameChanged, &QtEventFilter::OnObjectNameChanged, this);
 
 				watchedObject->removeEventFilter(this);
 			}

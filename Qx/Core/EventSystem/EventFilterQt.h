@@ -11,8 +11,8 @@ namespace Qx::EventSystem
 			QxEvtHandler* m_EvtHandler = nullptr;
 
 		private:
-			void OnDestroyed();
-			void OnNameChanged(const QString& newName);
+			void OnObjectDestroyed();
+			void OnObjectNameChanged(const QString& newName);
 
 			bool InterceptEvent(QEvent& qEvent);
 

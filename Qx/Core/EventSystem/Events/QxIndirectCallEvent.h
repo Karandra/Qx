@@ -4,7 +4,6 @@
 #include "Utility.h"
 #include <functional>
 #include <type_traits>
-class QxIndirectCallEvent;
 
 class QxIndirectCallEvent: public QxEvent, private QxEventCallWrapper
 {
@@ -24,9 +23,10 @@ class QxIndirectCallEvent: public QxEvent, private QxEventCallWrapper
 		}
 
 	public:
-		QxIndirectCallEvent()
+		QxIndirectCallEvent(QxEvtHandler& evtHandler)
 			:QxEvent(EvtIndirectCall)
 		{
+			AssignSender(evtHandler);
 		}
 
 	public:
@@ -51,8 +51,8 @@ namespace Qx::EventSystem
 			std::tuple<Args...> m_Parameters;
 
 		public:
-			FunctorIndirectCall(TCallable callable, Args&&... arg)
-				:m_Callable(std::move(callable)), m_Parameters(std::forward<Args>(arg)...)
+			FunctorIndirectCall(QxEvtHandler& evtHandler, TCallable callable, Args&&... arg)
+				:QxIndirectCallEvent(evtHandler), m_Callable(std::move(callable)), m_Parameters(std::forward<Args>(arg)...)
 			{
 			}
 			
@@ -72,8 +72,8 @@ namespace Qx::EventSystem
 			TFunction m_Function;
 
 		public:
-			FunctionIndirectCall(TFunction func, Args&&... arg)
-				:m_Function(func), m_Parameters(std::forward<Args>(arg)...)
+			FunctionIndirectCall(QxEvtHandler& evtHandler, TFunction func, Args&&... arg)
+				:QxIndirectCallEvent(evtHandler), m_Function(func), m_Parameters(std::forward<Args>(arg)...)
 			{
 			}
 			
@@ -93,8 +93,8 @@ namespace Qx::EventSystem
 			TMethod m_Method = nullptr;
 
 		public:
-			MethodIndirectCall(TMethod func, Args&&... arg)
-				:m_Method(func), m_Parameters(std::forward<Args>(arg)...)
+			MethodIndirectCall(QxEvtHandler& evtHandler, TMethod func, Args&&... arg)
+				:QxIndirectCallEvent(evtHandler), m_Method(func), m_Parameters(std::forward<Args>(arg)...)
 			{
 			}
 

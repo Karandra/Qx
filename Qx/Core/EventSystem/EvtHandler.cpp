@@ -265,30 +265,11 @@ void QxEvtHandler::DoQueueEvent(std::unique_ptr<QxEvent> event)
 	QxCoreApplication* app = QxCoreApplication::GetInstance();
 	if (app)
 	{
-		app->DoQueueEvent(*this, std::move(event));
+		app->DoQueueEvent(*m_CurrentHandler, std::move(event));
 	}
 }
 bool QxEvtHandler::DoProcessEvent(QxEvent& event)
 {
-	// Save itself as an event object and restore when we finish processing
-	class SetEventSender final
-	{
-		private:
-			QxEvent& m_Event;
-
-		public:
-			SetEventSender(QxEvent& event, QxEvtHandler* evtHandler)
-				:m_Event(event)
-			{
-				m_Event.m_EventSender = evtHandler;
-			}
-			~SetEventSender()
-			{
-				m_Event.m_EventSender = nullptr;
-			}
-	};
-	SetEventSender setEventSender(event, m_CurrentHandler);
-
 	// The very first thing we do is to allow any registered filters to hook
 	// into event processing in order to globally pre-process all events.
 	//

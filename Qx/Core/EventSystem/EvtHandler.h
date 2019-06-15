@@ -15,6 +15,11 @@ class QObject;
 class QxEventFilter;
 class QxEventCallWrapper;
 
+namespace Qx::EventSystem
+{
+	class QtEventFilter;
+}
+
 #pragma warning(push)
 #pragma warning(disable: 4100) // unreferenced formal parameter
 
@@ -36,6 +41,8 @@ namespace Qx::EventSystem
 
 class QxEvtHandler
 {
+	friend class Qx::EventSystem::QtEventFilter;
+
 	public:
 		enum class CientDataType
 		{
@@ -267,17 +274,21 @@ class QxEvtHandler
 		// Regular event sending functions
 		bool ProcessEvent(QxEvent& event)
 		{
+			event.AssignSender(*m_CurrentHandler);
 			return DoProcessEvent(event);
 		}
 		template<class TEvent, class... Args> bool ProcessEvent(Args&&... arg)
 		{
 			TEvent event(std::forward<Args>(arg)...);
+			event.AssignSender(*m_CurrentHandler);
+
 			return DoProcessEvent(event);
 		}
 		template<class TEvent, class... Args> bool ProcessEvent(QxEventTag<TEvent> eventTag, Args&&... arg)
 		{
 			TEvent event(std::forward<Args>(arg)...);
 			event.SetEventID(eventTag);
+			event.AssignSender(*m_CurrentHandler);
 
 			return DoProcessEvent(event);
 		}
@@ -304,6 +315,7 @@ class QxEvtHandler
 		{
 			TEvent event(std::forward<Args>(arg)...);
 			event.SetEventID(eventTag);
+			event.AssignSender(*m_CurrentHandler);
 
 			return QxEventBuilder<TEvent>(*this, event);
 		}
@@ -322,19 +334,19 @@ class QxEvtHandler
 		void CallAfter(TCallable callable, Args&&... arg)
 		{
 			using namespace Qx::EventSystem;
-			using TCallableTraits = Utility::CallableTraits<TCallable, Args...>;
+			using TCallableTraits = typename Qx::Utility::CallableTraits<TCallable, Args...>;
 
 			if constexpr(TCallableTraits::IsMemberFunction)
 			{
-				DoQueueEvent(std::make_unique<MethodIndirectCall<TCallable, Args...>>(callable, std::forward<Args>(arg)...));
+				DoQueueEvent(std::make_unique<MethodIndirectCall<TCallable, Args...>>(*this, callable, std::forward<Args>(arg)...));
 			}
 			else if constexpr(TCallableTraits::IsFreeFunction)
 			{
-				DoQueueEvent(std::make_unique<FunctionIndirectCall<TCallable, Args...>>(callable, std::forward<Args>(arg)...));
+				DoQueueEvent(std::make_unique<FunctionIndirectCall<TCallable, Args...>>(*this, callable, std::forward<Args>(arg)...));
 			}
 			else if constexpr(TCallableTraits::IsFunctor)
 			{
-				DoQueueEvent(std::make_unique<FunctorIndirectCall<TCallable, Args...>>(std::move(callable), std::forward<Args>(arg)...));
+				DoQueueEvent(std::make_unique<FunctorIndirectCall<TCallable, Args...>>(*this, std::move(callable), std::forward<Args>(arg)...));
 			}
 			else
 			{
