@@ -3,7 +3,7 @@ Implementation of some wxWidgets concepts in Qt
 
 
 # Description
-Qt signal/slot system may be amazin and all, but I never liked it and never will. Event system in wxWidgets is more to my liking, so I tried to implement some parts of it in Qt (looking at wxWidgets code of course).
+Qt signal/slot system may be amazing and all, but I never liked it and never will. Event system in wxWidgets is more to my liking, so I tried to implement some parts of it in Qt (looking at wxWidgets code of course).
 
 
 # What's implemented
@@ -56,7 +56,7 @@ class MainWindow: public QMainWindow, public QxEvtHandler
 			CallAfter(&MainWindow::OnButton);
 			
 			// Or even this
-			CallAfter(&MainWindow::OnButton, 42);
+			CallAfter(&MainWindow::OnButton, 100);
 			
 			// Setup UI after binding 'QxNotifyEvent::EvtObjectNameChanged' to get this event
 			m_UI->setupUi(this);
