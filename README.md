@@ -50,6 +50,9 @@ class MainWindow: public QMainWindow, public QxEvtHandler
 			{
 				...
 			});
+			
+			// Setup UI after binding 'QxNotifyEvent::EvtObjectNameChanged' to get this event
+			m_UI->setupUi(this);
 		}
 		~MainWindow() = default;
 }
