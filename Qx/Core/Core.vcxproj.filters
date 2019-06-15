@@ -1,0 +1,151 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Generated Files">
+      <UniqueIdentifier>{71ED8ED8-ACB9-4CE9-BBE1-E00B30144E11}</UniqueIdentifier>
+      <Extensions>cpp;c;cxx;moc;h;def;odl;idl;res;</Extensions>
+    </Filter>
+    <Filter Include="EventSystem">
+      <UniqueIdentifier>{8014cc3e-a853-4bd1-ab8c-a0bd25db0165}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="EventSystem\Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="EventSystem\Source Files\Events">
+      <UniqueIdentifier>{cb96f7d0-998a-4b3f-8926-988b902ba058}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="EventSystem\Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="EventSystem\Header Files\Events">
+      <UniqueIdentifier>{8093152d-ff3f-4e99-a679-40e5bbee3546}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Application">
+      <UniqueIdentifier>{691403b2-826d-4290-a4e0-0596ea41d087}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Application\Header Files">
+      <UniqueIdentifier>{64c21ad1-a127-4d82-91c3-2e7705e1634a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Application\Source Files">
+      <UniqueIdentifier>{3307da53-f35d-443b-be5b-04f3f6237543}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core">
+      <UniqueIdentifier>{6ed15b25-c3fb-4979-98b5-198827b3b130}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Core\Source Files\Utility">
+      <UniqueIdentifier>{12ed7a2d-452d-4f32-bfa1-7b734b6be6cc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Core\Header Files\Utility">
+      <UniqueIdentifier>{c0947715-87a1-4587-9219-3d414f7490a5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\Includes">
+      <UniqueIdentifier>{7ff21c99-2ea2-48fa-be77-aadd8322f913}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="EventSystem\Event.cpp">
+      <Filter>EventSystem\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="EventSystem\EventBuilder.cpp">
+      <Filter>EventSystem\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="EventSystem\EventFilterQt.cpp">
+      <Filter>EventSystem\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="EventSystem\EventItem.cpp">
+      <Filter>EventSystem\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="EventSystem\EventQt.cpp">
+      <Filter>EventSystem\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="EventSystem\EvtHandler.cpp">
+      <Filter>EventSystem\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Application\CoreApplication.cpp">
+      <Filter>Application\Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="EventSystem\Common.h">
+      <Filter>EventSystem\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="EventSystem\Event.h">
+      <Filter>EventSystem\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="EventSystem\EventBuilder.h">
+      <Filter>EventSystem\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="EventSystem\EventItem.h">
+      <Filter>EventSystem\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="EventSystem\EventQt.h">
+      <Filter>EventSystem\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="EventSystem\EvtHandler.h">
+      <Filter>EventSystem\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="EventSystem\CallWrapper.h">
+      <Filter>EventSystem\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="EventSystem\Events\QxButtonEvent.h">
+      <Filter>EventSystem\Header Files\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="EventSystem\Events\QxIdleEvent.h">
+      <Filter>EventSystem\Header Files\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="EventSystem\Events\QxIndirectCallEvent.h">
+      <Filter>EventSystem\Header Files\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="EventSystem\Events\QxIOEvent.h">
+      <Filter>EventSystem\Header Files\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="EventSystem\Events\QxNotifyEvent.h">
+      <Filter>EventSystem\Header Files\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="EventSystem\Events\QxTextEvent.h">
+      <Filter>EventSystem\Header Files\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="Utility.h">
+      <Filter>Core\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Common.h">
+      <Filter>Core\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="EventSystem.hpp">
+      <Filter>Core\Includes</Filter>
+    </ClInclude>
+    <ClInclude Include="Application.hpp">
+      <Filter>Core\Includes</Filter>
+    </ClInclude>
+    <ClInclude Include="Application\Common.h">
+      <Filter>Application\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ClientData.h">
+      <Filter>Core\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Application\CoreApplication.h">
+      <Filter>Application\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Application\Application.h">
+      <Filter>Application\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="EventSystem\EventFilter.h">
+      <Filter>EventSystem\Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <QtMoc Include="EventSystem\EventFilterQt.h">
+      <Filter>EventSystem\Header Files</Filter>
+    </QtMoc>
+  </ItemGroup>
+</Project>
