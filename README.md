@@ -13,6 +13,8 @@ Currentely there are three classes you can use: `QxEvtHandler`, `QxApplication` 
 # Usage
 Pretty much the same as in wxWidgets, here's an example.
 ```cpp
+#include <Qx/Core.hpp>
+
 class MainWindow: public QMainWindow, public QxEvtHandler
 {
 	private:
