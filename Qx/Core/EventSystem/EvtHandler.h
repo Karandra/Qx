@@ -41,6 +41,7 @@ namespace Qx::EventSystem
 
 class QxEvtHandler
 {
+	friend class QxCoreApplication;
 	friend class Qx::EventSystem::QtEventFilter;
 
 	public:
@@ -86,6 +87,7 @@ class QxEvtHandler
 		bool SearchEventTable(QxEvent& event);
 		bool ExecuteEventHandler(QxEvent& event, EventItem& eventItem, QxEvtHandler& evtHandler);
 		void ExecuteIndirectEvent(QxIndirectCallEvent& event);
+		void CallEventHandler(QxEvtHandler& evtHandler, QxEvent& event, QxEventCallWrapper& callWrapper);
 		
 		bool DoTryApp(QxEvent& event);
 		bool DoTryChain(QxEvent& event);

@@ -48,7 +48,7 @@ class QxEvent
 	private:
 		TCallback m_Callback;
 		QxEvtHandler* m_EventSender = nullptr;
-		QxEvtHandler* m_HandlerToProcessOnlyIn = nullptr;
+		QxEvtHandler* m_TargetHandler = nullptr;
 		void* m_ClientData = nullptr;
 
 		// Qt event object. Created on demand and used to pass QxEvent objects to Qt event loop.
@@ -106,9 +106,14 @@ class QxEvent
 			}
 			return false;
 		}
+
 		bool ShouldProcessOnlyIn(QxEvtHandler& evtHandler) const
 		{
-			return &evtHandler == m_HandlerToProcessOnlyIn;
+			return &evtHandler == m_TargetHandler;
+		}
+		void AssignTarget(QxEvtHandler& evtHandler)
+		{
+			m_TargetHandler = &evtHandler;
 		}
 
 	public:
@@ -213,6 +218,10 @@ class QxEvent
 		bool ExceptionThrown() const
 		{
 			return m_ExceptionThrown;
+		}
+		bool IsProcessed() const
+		{
+			return m_WasProcessed;
 		}
 
 		// Propagation

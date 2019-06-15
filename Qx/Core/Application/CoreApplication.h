@@ -32,6 +32,7 @@ class QxCoreApplication: public QxEvtHandler, public QxEventFilter
 		{
 			QxEvtHandler::DoQueueEvent(std::move(event));
 		}
+		virtual void CallEventHandler(QxEvtHandler& evtHandler, QxEvent& event, QxEventCallWrapper& callWrapper);
 
 		Result FilterEvent(QxEvent& event) override
 		{
@@ -60,8 +61,6 @@ class QxCoreApplication: public QxEvtHandler, public QxEventFilter
 		virtual bool UsesEventLoop() const;
 
 		virtual QAbstractEventDispatcher* GetMainLoop();
-		virtual void CallEventHandler(QxEvtHandler& evtHandler, QxEvent& event, QxEventCallWrapper& callWrapper);
-
 		virtual void Yield();
 		virtual void WakeUpIdle();
 

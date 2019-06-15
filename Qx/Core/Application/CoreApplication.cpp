@@ -33,6 +33,25 @@ void QxCoreApplication::DoQueueEvent(QxEvtHandler& evtHandler, std::unique_ptr<Q
 		QCoreApplication::postEvent(evtHandler.GetWatchedQObject(), event.release()->ReleaseToQt());
 	}
 }
+void QxCoreApplication::CallEventHandler(QxEvtHandler& evtHandler, QxEvent& event, QxEventCallWrapper& callWrapper)
+{
+	try
+	{
+		evtHandler.CallEventHandler(evtHandler, event, callWrapper);
+	}
+	catch (...)
+	{
+		event.m_ExceptionThrown = true;
+		if (!OnExceptionInMainLoop())
+		{
+			ExitMainLoop(-1);
+		}
+		else
+		{
+			OnUnhandledException();
+		}
+	}
+}
 
 QxCoreApplication::QxCoreApplication(QCoreApplication& qCoreApp)
 	:m_QCoreApp(&qCoreApp)
@@ -78,33 +97,6 @@ void QxCoreApplication::WakeUpIdle()
 QAbstractEventDispatcher* QxCoreApplication::GetMainLoop()
 {
 	return QCoreApplication::eventDispatcher();
-}
-void QxCoreApplication::CallEventHandler(QxEvtHandler& evtHandler, QxEvent& event, QxEventCallWrapper& callWrapper)
-{
-	try
-	{
-		callWrapper.Execute(evtHandler, event);
-
-		// If event wasn't skipped call callback for this event
-		// and restore any possible changes in skip state
-		if (const bool isSkipped = event.IsSkipped(); !isSkipped)
-		{
-			event.ExecuteCallback(evtHandler);
-			event.Skip(isSkipped);
-		}
-	}
-	catch (...)
-	{
-		event.m_ExceptionThrown = true;
-		if (!OnExceptionInMainLoop())
-		{
-			ExitMainLoop(-1);
-		}
-		else
-		{
-			OnUnhandledException();
-		}
-	}
 }
 
 void QxCoreApplication::ProcessQueuedEvents()

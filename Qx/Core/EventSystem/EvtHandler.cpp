@@ -95,7 +95,7 @@ bool QxEvtHandler::SearchEventTable(QxEvent& event)
 			QxEvtHandler* evtHandler = item.GetHandler()->GetEvtHandler();
 			if (evtHandler == nullptr)
 			{
-				evtHandler = this;
+				evtHandler = m_CurrentHandler;
 			}
 
 			if (ExecuteEventHandler(event, item, *evtHandler))
@@ -135,14 +135,40 @@ bool QxEvtHandler::ExecuteEventHandler(QxEvent& event, EventItem& eventItem, QxE
 	event.Skip(false);
 
 	// Call the handler
-	QxCoreApplication::GetInstance()->CallEventHandler(evtHandler, event, *eventItem.GetHandler());
+	if (QxCoreApplication* app = QxCoreApplication::GetInstance())
+	{
+		app->CallEventHandler(evtHandler, event, *eventItem.GetHandler());
+	}
+	else
+	{
+		CallEventHandler(*event.GetSender(), event, *eventItem.GetHandler());
+	}
 
 	// Return true if we processed this event and event handler itself didn't skipped it
 	return !event.IsSkipped();
 }
 void QxEvtHandler::ExecuteIndirectEvent(QxIndirectCallEvent& event)
 {
-	QxCoreApplication::GetInstance()->CallEventHandler(*event.GetSender(), event, event.GetCallWrapper());
+	if (QxCoreApplication* app = QxCoreApplication::GetInstance())
+	{
+		app->CallEventHandler(*event.GetSender(), event, event.GetCallWrapper());
+	}
+	else
+	{
+		CallEventHandler(*event.GetSender(), event, event.GetCallWrapper());
+	}
+}
+void QxEvtHandler::CallEventHandler(QxEvtHandler& evtHandler, QxEvent& event, QxEventCallWrapper& callWrapper)
+{
+	callWrapper.Execute(evtHandler, event);
+
+	// If event wasn't skipped call callback for this event
+	// and restore any possible changes in skip state
+	if (const bool isSkipped = event.IsSkipped(); !isSkipped)
+	{
+		event.ExecuteCallback(evtHandler);
+		event.Skip(isSkipped);
+	}
 }
 
 bool QxEvtHandler::DoTryApp(QxEvent& event)
@@ -182,26 +208,26 @@ bool QxEvtHandler::DoTryChain(QxEvent& event)
 		// by explicitly calling its ProcessEvent(), pre/post-processing should
 		// be done as usual.
 
-		class ProcessInHandlerOnlyChnager final
+		class TargetHandlerChnager final
 		{
 			private:
 				QxEvent& m_Event;
 				QxEvtHandler* m_OldEvtHandler = nullptr;
 
 			public:
-				ProcessInHandlerOnlyChnager(QxEvent& event, QxEvtHandler& evtHandler)
-					:m_Event(event), m_OldEvtHandler(event.m_HandlerToProcessOnlyIn)
+				TargetHandlerChnager(QxEvent& event, QxEvtHandler& evtHandler)
+					:m_Event(event), m_OldEvtHandler(event.m_TargetHandler)
 				{
-					m_Event.m_HandlerToProcessOnlyIn = &evtHandler;
+					m_Event.m_TargetHandler = &evtHandler;
 				}
-				~ProcessInHandlerOnlyChnager()
+				~TargetHandlerChnager()
 				{
-					m_Event.m_HandlerToProcessOnlyIn = m_OldEvtHandler;
+					m_Event.m_TargetHandler = m_OldEvtHandler;
 				}
 		};
 
-		ProcessInHandlerOnlyChnager setProcessInHandlerOnly(event, *evtHandler);
-		if (evtHandler->ProcessEvent(event))
+		TargetHandlerChnager targetChanger(event, *evtHandler);
+		if (evtHandler->DoProcessEvent(event))
 		{
 			// Make sure "skipped" flag is not set as the event was really
 			// processed in this case. Normally it shouldn't be set anyhow but
@@ -397,13 +423,6 @@ void QxEvtHandler::Unlink()
 }
 bool QxEvtHandler::IsUnlinked() const
 {
-	auto f = [](auto&&...)
-	{
-
-	};
-	using T = Qx::EventSystem::FunctorIndirectCall<decltype(f), double, int, int>;
-	constexpr size_t size = sizeof(T) - sizeof(QxIndirectCallEvent);
-
 	return m_PrevHandler == nullptr && m_NextHandler == nullptr;
 }
 

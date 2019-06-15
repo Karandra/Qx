@@ -27,6 +27,7 @@ class QxIndirectCallEvent: public QxEvent, private QxEventCallWrapper
 			:QxEvent(EvtIndirectCall)
 		{
 			AssignSender(evtHandler);
+			AssignTarget(evtHandler);
 		}
 
 	public:
@@ -104,7 +105,7 @@ namespace Qx::EventSystem
 				std::apply([this](auto&& ... arg)
 				{
 					using TClass = typename Utility::MethodTraits<TMethod>::TInstance;
-					std::invoke(m_Method, static_cast<TClass*>(&evtHandler), std::forward<decltype(arg)>(arg)...);
+					std::invoke(m_Method, static_cast<TClass*>(GetSender()), std::forward<decltype(arg)>(arg)...);
 				}, std::move(m_Parameters));
 			}
 	};
