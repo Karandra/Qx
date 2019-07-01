@@ -34,6 +34,7 @@ class MainWindow: public QMainWindow, public QxEvtHandler
 		MainWindow(QWidget* parent = nullptr)
 			:QMainWindow(parent), QxEvtHandler(this), m_UI(std::make_unique<Ui::MainWindow>())
 		{
+			// -------------- Binding to an event
 			// [1] Alternate order of parameters to QObject::connect, nothing special
 			Qx::EventSystem::ConnectSignal(m_UI->Button, &QPushButton::clicked, &MainWindow::OnButton, this);
 			
@@ -46,19 +47,45 @@ class MainWindow: public QMainWindow, public QxEvtHandler
 				QMessageBox(QMessageBox::Icon::Information, event.GetString(), "Object name changed");
 			});
 			
-			// [4] Queues execution of a given callable (lambda function is this case) to next event loop iteration
+			// -------------- Sending an event
+			// [4] Queues given event to next event loop iteration. Queues event with "null" type. 
+			QueueEvent(std::make_unique<QxNotifyEvent>("New name"));
+			
+			// [4.1] Shorthand that forwards parameters to event constructor without explicit call of 'std::make_unique'.
+			QueueEvent<QxNotifyEvent>("New name");
+			
+			// [4.2] Variant of above with deducing event type from event ID. Forwards additional parameters to event constructor.
+			// Sets this ID as event ID.
+			QueueEvent(QxNotifyEvent::EvtObjectNameChanged, "New name");
+			
+			// [5] Queues given event to next event loop iteration and allows to configure it
+			QueueEventEx(QxNotifyEvent::EvtObjectNameChanged).On([](QxNotifyEvent& event)
+			{
+				// Configure it here before queuing
+				event.SetString("New name");
+			}).Then([](QxNotifyEvent& event)
+			{
+				// Callback to be called after this event has been processed by an event handler.
+				// Will be called in each event handler that processed and not skipped this event.
+			});
+			
+			// [6] Queues execution of a given callable (lambda function is this case) to next event loop iteration
 			CallAfter([this]()
 			{
 				...
 			});
 			
-			// Or this way
+			// [6.1] Or this way
 			CallAfter(&MainWindow::OnButton);
 			
-			// Or even this
+			// [6.2] Or even this
 			CallAfter(&MainWindow::OnButton, 100);
 			
-			// Setup UI after binding 'QxNotifyEvent::EvtObjectNameChanged' to get this event
+			// There are also variants of 'ProcessEvent[Ex]' with the same signatures to initiate event processing right here,
+			// without waiting for next loop iteration.
+			
+			// -------------- Everything else
+			// Setup UI after binding to 'QxNotifyEvent::EvtObjectNameChanged' to get this event
 			m_UI->setupUi(this);
 		}
 		~MainWindow() = default;
