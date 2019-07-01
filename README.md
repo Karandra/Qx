@@ -67,7 +67,8 @@ class MainWindow: public QMainWindow, public QxEvtHandler
 			{
 				// Callback to be called after this event has been processed by an event handler.
 				// Will be called in each event handler that processed and not skipped this event.
-			});
+			}).Do();
+			// Do() actually queues the event. It will be called in EventBuilder object destructor if it wasn't called manually.
 			
 			// [6] Queues execution of a given callable (lambda function is this case) to next event loop iteration
 			CallAfter([this]()
