@@ -7,7 +7,7 @@ Qt signal/slot system may be amazing and all, but I never liked it and never wil
 
 
 # What's implemented
-Currentely there are three classes you can use: `QxEvtHandler`, `QxApplication` and `QxThread`. They are trying to model [`wxEvtHandler`](https://docs.wxwidgets.org/trunk/classwx_evt_handler.html), [`wxApp[Console]`](https://docs.wxwidgets.org/trunk/classwx_app.html) and [`wxThread`](https://docs.wxwidgets.org/trunk/classwx_thread.html) respectively. Also there are some basic event classe like `QxNotifyEvent`.
+Currentely there are three classes you can use: `QxEvtHandler`, `QxApplication` and `QxThread`. They are trying to model [`wxEvtHandler`](https://docs.wxwidgets.org/trunk/classwx_evt_handler.html), [`wxApp[Console]`](https://docs.wxwidgets.org/trunk/classwx_app.html) and [`wxThread`](https://docs.wxwidgets.org/trunk/classwx_thread.html) respectively. Also there are some basic event classes like `QxNotifyEvent`.
 
 
 # Usage
